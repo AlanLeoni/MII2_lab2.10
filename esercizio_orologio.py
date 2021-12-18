@@ -17,8 +17,8 @@ from img_lib_v0_6 import(
     sovrapponi, 
     cambia_punto_riferimento, 
     componi, 
+    crea_gif,
     salva_immagine,
-    visualizza_immagine
 )
 
 RAGGIO = 300
@@ -38,6 +38,58 @@ def crea_sfondo() -> Immagine:
     sfondo_grigio = cerchio(RAGGIO, GRIGIO)
     sfondo_bianco = cerchio((RAGGIO * 95 // 100), BIANCO)
     return sovrapponi(sfondo_bianco, sfondo_grigio)
+
+def crea_tacca_minuti() -> Immagine:
+    """
+    Crea la singola tacca che indica i minuti
+    
+    :returns: una singola tacca indicante i minuti
+    """
+    altezza_tacca = RAGGIO * 3 // 100
+    testa_tacca = rettangolo(RAGGIO * 82 // 100, altezza_tacca, BIANCO)
+    coda_tacca = rettangolo(RAGGIO * 8 // 100, altezza_tacca, NERO)
+    return cambia_punto_riferimento(
+        affianca(testa_tacca, coda_tacca), "left", "middle")
+
+        
+def crea_tacca_cinque_minuti() -> Immagine:
+    """
+    Crea la singola tacca che indica i cinque minuti
+    
+    :returns: una singola tacca indicante i cinque minuti
+    """
+    altezza_tacca = RAGGIO * 8 // 100
+    testa_tacca = rettangolo(RAGGIO * 70 // 100, altezza_tacca, BIANCO)
+    coda_tacca = rettangolo(RAGGIO * 20 // 100, altezza_tacca, NERO)
+    return cambia_punto_riferimento(
+        affianca(testa_tacca, coda_tacca), "left", "middle")
+
+
+def crea_tacche_minuti_5_minuti() -> Immagine:
+    """
+    Crea le tacche circolari indicanti i minuti ed evidenziati i 5 minuti
+    
+    returns: le tacche circolari indicanti i minuti e i 5 minuti
+    """
+    gradi  = 360 // 60
+    quadrante_prec = immagine_vuota()
+    for tacca in range(0, 360, gradi):
+        if tacca % (360 //12) == 0: 
+            tacca_quadrante = ruota(crea_tacca_cinque_minuti(), tacca)
+        else:
+            tacca_quadrante = ruota(crea_tacca_minuti(), tacca)    
+        quadrante_minuti = componi(quadrante_prec, tacca_quadrante)
+        quadrante_prec = quadrante_minuti
+    return quadrante_minuti
+
+
+def crea_quadrante() -> Immagine:
+    """
+    Crea il quadrante dell'orologio con tacche minuti e cinque minuti
+    
+    :returns: un'immagine del quadrante dell'orologio senza lancette
+    """
+    return componi(crea_tacche_minuti_5_minuti(), crea_sfondo())
 
 
 def crea_lancetta_minuti(angolo: int) -> Immagine:
@@ -66,7 +118,8 @@ def angolo_minuti(minuti: int) -> int:
     :param minuti: la posizione della lancetta
     :returns: l'angolo di apertura della lancetta rispetto alla posizione 0
     """
-    return minuti * 6
+    grado_rotazione_minuto = 360 // 60
+    return minuti * grado_rotazione_minuto
 
 
 def crea_lancetta_ore(angolo: int) -> Immagine:
@@ -97,74 +150,8 @@ def angolo_ore(ore: int, minuti: int) -> int:
     :param minuti: i minuti desiderati
     :returns: l'angolo di apertura della lancetta rispetto alla posizione 0
     """
-    return ((ore * 30) % 360) + (angolo_minuti(minuti))//12
-
-
-def crea_tacca_minuti() -> Immagine:
-    """
-    Crea la singola tacca che indica i minuti
-    
-    :returns: una singola tacca indicante i minuti
-    """
-    altezza_tacca = RAGGIO * 3 // 100
-    testa_tacca = rettangolo(RAGGIO * 82 // 100, altezza_tacca, BIANCO)
-    coda_tacca = rettangolo(RAGGIO * 8 // 100, altezza_tacca, NERO)
-    return cambia_punto_riferimento(
-        affianca(testa_tacca, coda_tacca), "left", "middle")
-
-
-def crea_tacche_minuti() -> Immagine:
-    """
-    Crea le tacche circolari indicanti i minuti
-    
-    :returns: le tacche circolari indicanti i minuti
-    """
-    gradi = 6
-    quadrante_prec = immagine_vuota()
-    for tacca in range(0, 360, gradi):
-        tacca_quadrante = ruota(crea_tacca_minuti(), tacca)
-        quadrante_minuti = componi(quadrante_prec, tacca_quadrante)
-        quadrante_prec = quadrante_minuti
-    return quadrante_minuti
-
-
-def crea_tacca_cinque_minuti() -> Immagine:
-    """
-    Crea la singola tacca che indica i cinque minuti
-    
-    :returns: una singola tacca indicante i cinque minuti
-    """
-    altezza_tacca = RAGGIO * 8 // 100
-    testa_tacca = rettangolo(RAGGIO * 70 // 100, altezza_tacca, BIANCO)
-    coda_tacca = rettangolo(RAGGIO * 20 // 100, altezza_tacca, NERO)
-    return cambia_punto_riferimento(
-        affianca(testa_tacca, coda_tacca), "left", "middle")
-
-
-def crea_tacche_cinque_minuti() -> Immagine:
-    """
-    Crea le tacche circolari indicanti i cinque minuti
-    
-    :returns: le tacche circolari indicanti i cinque minuti
-    """
-    gradi = 30
-    quadrante_prec = immagine_vuota()
-    for tacca in range(0, 360, gradi):
-        tacca_quadrante = ruota(crea_tacca_cinque_minuti(), tacca)
-        quadrante_cinque_minuti = componi(quadrante_prec, tacca_quadrante)
-        quadrante_prec = quadrante_cinque_minuti
-    return quadrante_cinque_minuti
-
-
-def crea_quadrante() -> Immagine:
-    """
-    Crea il quadrante dell'orologio con tacche minuti e cinque minuti
-    
-    :returns: un'immagine del quadrante dell'orologio senza lancette
-    """
-    return componi(
-        componi(crea_tacche_cinque_minuti(), crea_tacche_minuti()), 
-        crea_sfondo())
+    grado_rotazione_ore = 360 // 12
+    return ((ore * grado_rotazione_ore) % 360) + (angolo_minuti(minuti))//12
 
 
 def crea_lancetta_secondi(angolo: int) -> Immagine:
@@ -208,4 +195,23 @@ def crea_orologio(ore: int, minuti: int, secondi: int) -> Immagine:
                        ore_minuti)
     return componi(lancette, crea_quadrante())
 
-salva_immagine("orologio_ore_minuti_secondi", crea_orologio(4, 10, 45))
+
+def crea_animazione_orologio(ore: int, minuti: int, secondi: int):
+    """
+    Crea l'animazione di un orologio con la lancetta dei secondi che si muove 
+    da 0 a secondi
+    
+    param ore: la posizione della lancetta delle ore
+    param minuti: la posizione della lancetta dei minuti
+    param minuti: la posizione della lancetta dei secondi
+    returns: la gif animata di un orologio
+    """
+    lista_orologi = [
+        crea_orologio(ore, minuti, passo)
+        for passo in range(0, secondi)
+    ]
+    velocita = (40 * 1000 //40)
+    return crea_gif("animazione_orologio",lista_orologi, velocita)
+
+
+crea_animazione_orologio(11, 15, 59)
