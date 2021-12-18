@@ -1,10 +1,11 @@
 """
 Il file contiene funzioni che permettono la costruzione di un orologio stile 
-FFS che indica ore e minuti.
+FFS che indica ore e minuti e secondi
 In particolare le funzioni permettono di:
 - creare lo sfondo del quadrante che evidenzia i minuti e i cinque minuti
 - creare le lancette delle ore e dei minuti
-- creare un orologio stile FFS con indicazioni ore e minuti
+- creare la lancetta dei secondi
+- creare un orologio stile FFS con indicazione su ore, minuti e secondi
 """
 from img_lib_v0_6 import(
     Immagine, 
@@ -24,6 +25,8 @@ RAGGIO = 300
 NERO = (0, 0, 0)
 BIANCO = (255, 255, 255)
 GRIGIO = (84, 84, 84)
+ROSSO = (255, 0, 0)
+
 
 
 def crea_sfondo() -> Immagine:
@@ -164,20 +167,45 @@ def crea_quadrante() -> Immagine:
         crea_sfondo())
 
 
-def crea_orologio(ore: int, minuti: int) -> Immagine:
+def crea_lancetta_secondi(angolo: int) -> Immagine:
     """
-    Cra un orologio stile FFS con le lancette all'ora e al minuto desiderato
+    Crea la lancetta dei secondi in posizione ore 0
     
-    :param ore: l'ora rispetto alla quale si deve posizionare la lancetta 
-    delle ore. Accettati il formato 12h e 24h
-    :param minuti: i minuti rispetto ai quali si deve posizionare la lancetta 
-    dei minuti
-    :returns: un orologio stile FFS con l'ora e i minuti desiderati
+    :param angolo: angolo di apertura della lancetta
+    :returns: una lancetta ruotata
     """
-    return componi(
-        componi(crea_lancetta_ore(angolo_ore(ore, minuti)), 
-                crea_lancetta_minuti(angolo_minuti(minuti))), 
-        crea_quadrante())
+    altezza_lancetta = RAGGIO * 2 // 100
+    pallino_lancetta = cambia_punto_riferimento(
+        cerchio(RAGGIO *8 // 100, ROSSO), 
+        "middle", "middle")
+    lancetta_testa = cambia_punto_riferimento(
+        (rettangolo(RAGGIO * 25 // 100, altezza_lancetta, ROSSO)), 
+        "right", "middle")
+    lancetta_coda = cambia_punto_riferimento(
+        (rettangolo(RAGGIO * 60 // 100, altezza_lancetta, ROSSO)),
+        "left", "middle")
+    lancetta_orizzontale = affianca(
+        lancetta_testa, affianca(lancetta_coda, pallino_lancetta))
+    lancetta_verticale = ruota(lancetta_orizzontale, 90)
+    return ruota(lancetta_verticale, -(angolo))
 
 
-salva_immagine("orologio", crea_orologio(4, 10))
+def angolo_secondi(secondi: int) -> int:
+    """
+    Definisce il grado di rotazione rispetto ai secondi
+    
+    :param secondi: la posizione della lancetta
+    :returns: l'angolo di apertura della lancetta rispetto alla posizione 0
+    """
+    angolo = secondi * 6
+    return angolo
+
+
+def crea_orologio(ore: int, minuti: int, secondi: int) -> Immagine:
+    ore_minuti = componi(crea_lancetta_ore(angolo_ore(ore, minuti)), 
+                         crea_lancetta_minuti(angolo_minuti(minuti)))
+    lancette = componi(crea_lancetta_secondi(angolo_secondi(secondi)),
+                       ore_minuti)
+    return componi(lancette, crea_quadrante())
+
+salva_immagine("orologio_ore_minuti_secondi", crea_orologio(4, 10, 45))
