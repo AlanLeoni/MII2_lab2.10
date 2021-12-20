@@ -66,11 +66,12 @@ def crea_tacca_minuti() -> Immagine:
 # Proposta 1
 controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), (RAGGIO * 82 // 100) + RAGGIO * 8 // 100 )
 # Proposta 2
-controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), 44)
+controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), 270)
 
 # Proposta 3
+# Commentata perché dovrei mettere lunghezza_testa_tacca e lunghezza_coda_tacca come variabili globali
+#controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), lunghezza_testa_tacca + lunghezza_coda_tacca)
 
-controlla_valore_atteso(altezza_immagine(crea_tacca_minuti()), RAGGIO * 3 //100)
     
         
 def crea_tacca_cinque_minuti() -> Immagine:
