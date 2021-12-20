@@ -1,11 +1,12 @@
 """
-Il file contiene funzioni che permettono la costruzione di un orologio stile 
-FFS che indica ore e minuti e secondi
+Il file contiene funzioni che permettono la costruzione e l'animazione di un
+orologio stile FFS che indica ore e minuti e secondi
 In particolare le funzioni permettono di:
 - creare lo sfondo del quadrante che evidenzia i minuti e i cinque minuti
 - creare le lancette delle ore e dei minuti
 - creare la lancetta dei secondi
 - creare un orologio stile FFS con indicazione su ore, minuti e secondi
+- creare l'animazione dei secondi dell'orologio
 """
 from img_lib_v0_6 import(
     Immagine, 
@@ -31,7 +32,6 @@ NERO = (0, 0, 0)
 BIANCO = (255, 255, 255)
 GRIGIO = (84, 84, 84)
 ROSSO = (255, 0, 0)
-
 
 
 def crea_sfondo() -> Immagine:
@@ -101,7 +101,7 @@ def crea_tacche_minuti_5_minuti() -> Immagine:
         quadrante_minuti = componi(quadrante_prec, tacca_quadrante)
         quadrante_prec = quadrante_minuti
     return quadrante_minuti
-controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), ((RAGGIO * 82 // 100) + (RAGGIO * 8 // 100 )) * 2 + 0)
+# controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), ((RAGGIO * 82 // 100) + (RAGGIO * 8 // 100 )) * 2)
 
 def crea_quadrante() -> Immagine:
     """
@@ -203,7 +203,7 @@ def crea_lancetta_secondi(angolo: int) -> Immagine:
         lancetta_testa, affianca(lancetta_coda, pallino_lancetta))
     lancetta_verticale = ruota(lancetta_orizzontale, 90)
     return ruota(lancetta_verticale, -(angolo))
-
+controlla_valore_atteso(altezza_immagine(crea_lancetta_secondi(0)), 303)
 
 def angolo_secondi(secondi: int) -> int:
     """
@@ -214,7 +214,7 @@ def angolo_secondi(secondi: int) -> int:
     """
     angolo = secondi * 6
     return angolo
-
+controlla_valore_atteso(angolo_secondi(10), 60)
 
 def crea_orologio(ore: int, minuti: int, secondi: int) -> Immagine:
     ore_minuti = componi(crea_lancetta_ore(angolo_ore(ore, minuti)), 
