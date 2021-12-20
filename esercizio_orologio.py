@@ -33,6 +33,9 @@ BIANCO = (255, 255, 255)
 GRIGIO = (84, 84, 84)
 ROSSO = (255, 0, 0)
 
+# crea_sfondo()
+RAGGIO_SFONDO_BIANCO = RAGGIO * 95 //100
+DIAMETRO_SFONDO = RAGGIO * 2
 
 def crea_sfondo() -> Immagine:
     """
@@ -40,57 +43,51 @@ def crea_sfondo() -> Immagine:
     
     :returns: il cerchio del quadrante con un bordo grigio
     """
-    raggio_sfondo_bianco = RAGGIO * 95 // 100
     sfondo_grigio = cerchio(RAGGIO, GRIGIO)
-    sfondo_bianco = cerchio((raggio_sfondo_bianco), BIANCO)
+    sfondo_bianco = cerchio((RAGGIO_SFONDO_BIANCO), BIANCO)
     return sovrapponi(sfondo_bianco, sfondo_grigio)
 
-controlla_valore_atteso(larghezza_immagine(crea_sfondo()), RAGGIO * 2)
-controlla_valore_atteso(altezza_immagine(crea_sfondo()), RAGGIO * 2)
+controlla_valore_atteso(larghezza_immagine(crea_sfondo()), DIAMETRO_SFONDO)
+controlla_valore_atteso(altezza_immagine(crea_sfondo()), DIAMETRO_SFONDO)
 
+
+ALTEZZA_TACCA_MINUTI = RAGGIO * 3 // 100
+LUNGHEZZA_TESTA_TACCA_MINUTI = RAGGIO * 82 // 100
+LUNGHEZZA_CODA_TACCA_MINUTI = RAGGIO * 8 // 100
 def crea_tacca_minuti() -> Immagine:
     """
     Crea la singola tacca che indica i minuti
     
     :returns: una singola tacca indicante i minuti
     """
-    altezza_tacca = RAGGIO * 3 // 100
-    lunghezza_testa_tacca= RAGGIO * 82 // 100
-    lunghezza_coda_tacca = RAGGIO * 8 // 100
-    
-    testa_tacca = rettangolo(lunghezza_testa_tacca, altezza_tacca, BIANCO)
-    coda_tacca = rettangolo(lunghezza_coda_tacca, altezza_tacca, NERO)
+    testa_tacca = rettangolo(LUNGHEZZA_TESTA_TACCA_MINUTI, ALTEZZA_TACCA_MINUTI, BIANCO)
+    coda_tacca = rettangolo(LUNGHEZZA_CODA_TACCA_MINUTI, ALTEZZA_TACCA_MINUTI, NERO)
     return cambia_punto_riferimento(
         affianca(testa_tacca, coda_tacca), "left", "middle")
 
-# Proposta 1
-controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), (RAGGIO * 82 // 100) + RAGGIO * 8 // 100 )
-# Proposta 2
-controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), 270)
+controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), LUNGHEZZA_TESTA_TACCA_MINUTI + LUNGHEZZA_CODA_TACCA_MINUTI)
 
-# Proposta 3
-# Commentata perché dovrei mettere lunghezza_testa_tacca e lunghezza_coda_tacca come variabili globali
-#controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), lunghezza_testa_tacca + lunghezza_coda_tacca)
 
-    
-        
+ALTEZZA_TACCA_5_MINUTI = RAGGIO * 8 // 100
+LUNGHEZZA_TESTA_TACCA_5_MINUTI = RAGGIO * 70 // 100
+LUNGHEZZA_CODA_TACCA_5_MINUTI = RAGGIO * 20 // 100
 def crea_tacca_cinque_minuti() -> Immagine:
     """
     Crea la singola tacca che indica i cinque minuti
     
     :returns: una singola tacca indicante i cinque minuti
     """
-    altezza_tacca = RAGGIO * 8 // 100
-    lunghezza_testa_tacca = RAGGIO * 70 // 100
-    lunghezza_coda_tacca = RAGGIO * 20 // 100
-    testa_tacca = rettangolo(lunghezza_testa_tacca, altezza_tacca, BIANCO)
-    coda_tacca = rettangolo(lunghezza_coda_tacca, altezza_tacca, NERO)
+    testa_tacca = rettangolo(LUNGHEZZA_TESTA_TACCA_5_MINUTI, ALTEZZA_TACCA_5_MINUTI, BIANCO)
+    coda_tacca = rettangolo(LUNGHEZZA_CODA_TACCA_5_MINUTI, ALTEZZA_TACCA_5_MINUTI, NERO)
     return cambia_punto_riferimento(
         affianca(testa_tacca, coda_tacca), "left", "middle")
 
-controlla_valore_atteso(larghezza_immagine(crea_tacca_cinque_minuti()), (RAGGIO * 70 // 100) + RAGGIO * 20 // 100 )
-controlla_valore_atteso(altezza_immagine(crea_tacca_cinque_minuti()), RAGGIO * 8 //100)
+controlla_valore_atteso(larghezza_immagine(crea_tacca_cinque_minuti()), LUNGHEZZA_TESTA_TACCA_5_MINUTI + LUNGHEZZA_CODA_TACCA_5_MINUTI)
+controlla_valore_atteso(altezza_immagine(crea_tacca_cinque_minuti()), ALTEZZA_TACCA_5_MINUTI)
 
+
+GRADI_TACCHE_5_MINUTI = 360 // 60
+MOD5_TACCHE_5_MINUTI = 360 // 12
 def crea_tacche_minuti_5_minuti() -> Immagine:
     """
     Crea le tacche circolari indicanti i minuti ed evidenziati i 5 minuti
@@ -108,7 +105,8 @@ def crea_tacche_minuti_5_minuti() -> Immagine:
         quadrante_minuti = componi(quadrante_prec, tacca_quadrante)
         quadrante_prec = quadrante_minuti
     return quadrante_minuti
-# controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), ((RAGGIO * 82 // 100) + (RAGGIO * 8 // 100 )) * 2)
+
+controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), ((LUNGHEZZA_TESTA_TACCA_5_MINUTI + LUNGHEZZA_CODA_TACCA_5_MINUTI)* 2) - 1)
 
 def crea_quadrante() -> Immagine:
     """
@@ -118,7 +116,13 @@ def crea_quadrante() -> Immagine:
     """
     return componi(crea_tacche_minuti_5_minuti(), crea_sfondo())
 
+controlla_valore_atteso(larghezza_immagine(crea_quadrante()), DIAMETRO_SFONDO)
+controlla_valore_atteso(altezza_immagine(crea_quadrante()), DIAMETRO_SFONDO)
 
+
+ALTEZZA_LANCETTA_MINUTI = RAGGIO * 10 // 100
+LUNGHEZZA_TESTA_LANCETTA_MINUTI = RAGGIO * 20 // 100
+LUNGHEZZA_CODA_LANCETTA_MINUTI = RAGGIO * 85 // 100
 def crea_lancetta_minuti(angolo: int) -> Immagine:
     """
     Crea la lancetta dei minuti in posizione ore 0
@@ -126,20 +130,18 @@ def crea_lancetta_minuti(angolo: int) -> Immagine:
     :param angolo: angolo di apertura della lancetta
     :returns: una lancetta ruotata
     """
-    altezza_lancetta = RAGGIO * 10 // 100
-    lunghezza_testa_lancetta = RAGGIO * 20 // 100
-    lunghezza_coda_lancetta = RAGGIO * 85 // 100
     posizione_zero = 90
     lancetta_testa = cambia_punto_riferimento(
-        (rettangolo(lunghezza_testa_lancetta, altezza_lancetta, NERO)), 
+        (rettangolo(LUNGHEZZA_TESTA_LANCETTA_MINUTI, ALTEZZA_LANCETTA_MINUTI, NERO)), 
         "right", "middle")
     lancetta_coda = cambia_punto_riferimento(
-        (rettangolo(lunghezza_coda_lancetta, altezza_lancetta, NERO)), 
+        (rettangolo(LUNGHEZZA_CODA_LANCETTA_MINUTI, ALTEZZA_LANCETTA_MINUTI, NERO)), 
         "left", "middle")
     lancetta_orizzontale = affianca(lancetta_testa, lancetta_coda)
     lancetta_verticale = ruota(lancetta_orizzontale, posizione_zero)
     return ruota(lancetta_verticale, -(angolo))
-
+controlla_valore_atteso(larghezza_immagine(crea_lancetta_minuti(90)), LUNGHEZZA_TESTA_LANCETTA_MINUTI + LUNGHEZZA_CODA_LANCETTA_MINUTI)
+controlla_valore_atteso(altezza_immagine(crea_lancetta_minuti(90)), ALTEZZA_LANCETTA_MINUTI)
 
 def angolo_minuti(minuti: int) -> int:
     """
@@ -151,7 +153,9 @@ def angolo_minuti(minuti: int) -> int:
     grado_rotazione_minuto = 360 // 60
     return minuti * grado_rotazione_minuto
 
-
+ALTEZZA_LANCETTA_ORE = RAGGIO * 12 // 100
+LUNGHEZZA_LANCETTA_TESTA_ORE = RAGGIO * 20 // 100
+LUNGHEZZA_LANCETTA_CODA_ORE = RAGGIO * 60 // 100
 def crea_lancetta_ore(angolo: int) -> Immagine:
     """
     Crea l'immagine di una lancetta in posizione 0
@@ -159,18 +163,18 @@ def crea_lancetta_ore(angolo: int) -> Immagine:
     :params angolo: angolo di rotazione rispetto alla posizione 0
     :returns: una lancetta ruotata
     """
-    altezza_lancetta = RAGGIO * 12 // 100
-    lunghezza_lancetta_testa = RAGGIO * 20 // 100
-    lunghezza_lancetta_coda = RAGGIO * 60 // 100
     lancetta_testa = cambia_punto_riferimento(
-        (rettangolo(lunghezza_lancetta_testa, altezza_lancetta, NERO)), 
+        (rettangolo(LUNGHEZZA_LANCETTA_TESTA_ORE, ALTEZZA_LANCETTA_ORE, NERO)), 
         "right", "middle")
     lancetta_coda = cambia_punto_riferimento(
-        (rettangolo(lunghezza_lancetta_coda, altezza_lancetta, NERO)), 
+        (rettangolo(LUNGHEZZA_LANCETTA_CODA_ORE, ALTEZZA_LANCETTA_ORE, NERO)), 
         "left", "middle")
     lancetta_orizzontale = affianca(lancetta_testa, lancetta_coda)
     lancetta_verticale = ruota(lancetta_orizzontale, 90)
     return ruota(lancetta_verticale, -(angolo))
+
+controlla_valore_atteso(larghezza_immagine(crea_lancetta_ore(90)), LUNGHEZZA_LANCETTA_TESTA_ORE + LUNGHEZZA_LANCETTA_CODA_ORE)
+controlla_valore_atteso(altezza_immagine(crea_lancetta_ore(90)), ALTEZZA_LANCETTA_ORE)
 
 
 def angolo_ore(ore: int, minuti: int) -> int:
@@ -186,6 +190,10 @@ def angolo_ore(ore: int, minuti: int) -> int:
     return ((ore * grado_rotazione_ore) % 360) + (angolo_minuti(minuti))//12
 
 
+ALTEZZA_LANCETTA_SECONDI  = RAGGIO * 2 // 100
+RAGGIO_PALLINO_ROSSO = RAGGIO * 8 // 100
+LUNGHEZZA_LANCETTA_TESTA_SECONDI = RAGGIO * 25 // 100
+LUNGHEZZA_LANCETTA_CODA_SECONDI = RAGGIO * 60 // 100
 def crea_lancetta_secondi(angolo: int) -> Immagine:
     """
     Crea la lancetta dei secondi in posizione ore 0
@@ -193,24 +201,22 @@ def crea_lancetta_secondi(angolo: int) -> Immagine:
     :param angolo: angolo di apertura della lancetta
     :returns: una lancetta ruotata
     """
-    altezza_lancetta = RAGGIO * 2 // 100
-    raggio_pallino_rosso = RAGGIO * 8 // 100
-    lunghezza_lancetta_testa = RAGGIO * 25 // 100
-    lunghezza_lancetta_coda = RAGGIO * 60 // 100
     pallino_lancetta = cambia_punto_riferimento(
-        cerchio(raggio_pallino_rosso, ROSSO), 
+        cerchio(RAGGIO_PALLINO_ROSSO, ROSSO), 
         "middle", "middle")
     lancetta_testa = cambia_punto_riferimento(
-        (rettangolo(lunghezza_lancetta_testa, altezza_lancetta, ROSSO)), 
+        (rettangolo(LUNGHEZZA_LANCETTA_TESTA_SECONDI, ALTEZZA_LANCETTA_SECONDI, ROSSO)), 
         "right", "middle")
     lancetta_coda = cambia_punto_riferimento(
-        (rettangolo(lunghezza_lancetta_coda, altezza_lancetta, ROSSO)),
+        (rettangolo(LUNGHEZZA_LANCETTA_CODA_SECONDI, ALTEZZA_LANCETTA_SECONDI, ROSSO)),
         "left", "middle")
     lancetta_orizzontale = affianca(
         lancetta_testa, affianca(lancetta_coda, pallino_lancetta))
     lancetta_verticale = ruota(lancetta_orizzontale, 90)
     return ruota(lancetta_verticale, -(angolo))
-controlla_valore_atteso(altezza_immagine(crea_lancetta_secondi(0)), 303)
+
+controlla_valore_atteso(altezza_immagine(crea_lancetta_secondi(90)), RAGGIO_PALLINO_ROSSO * 2)
+
 
 def angolo_secondi(secondi: int) -> int:
     """
@@ -221,7 +227,7 @@ def angolo_secondi(secondi: int) -> int:
     """
     angolo = secondi * 6
     return angolo
-controlla_valore_atteso(angolo_secondi(10), 60)
+
 
 def crea_orologio(ore: int, minuti: int, secondi: int) -> Immagine:
     ore_minuti = componi(crea_lancetta_ore(angolo_ore(ore, minuti)), 
@@ -229,6 +235,9 @@ def crea_orologio(ore: int, minuti: int, secondi: int) -> Immagine:
     lancette = componi(crea_lancetta_secondi(angolo_secondi(secondi)),
                        ore_minuti)
     return componi(lancette, crea_quadrante())
+
+controlla_valore_atteso(larghezza_immagine(crea_orologio(4, 10, 15)), DIAMETRO_SFONDO)
+controlla_valore_atteso(altezza_immagine(crea_orologio(4, 10, 15)), DIAMETRO_SFONDO)
 
 
 def crea_animazione_orologio(ore: int, minuti: int, secondi: int):
@@ -247,6 +256,5 @@ def crea_animazione_orologio(ore: int, minuti: int, secondi: int):
     ]
     velocita = (40 * 1000 //40)
     return crea_gif("animazione_orologio",lista_orologi, velocita)
-
 
 # crea_animazione_orologio(11, 15, 59)
