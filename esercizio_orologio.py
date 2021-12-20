@@ -63,7 +63,13 @@ def crea_tacca_minuti() -> Immagine:
     return cambia_punto_riferimento(
         affianca(testa_tacca, coda_tacca), "left", "middle")
 
+# Proposta 1
 controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), (RAGGIO * 82 // 100) + RAGGIO * 8 // 100 )
+# Proposta 2
+controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), 44)
+
+# Proposta 3
+
 controlla_valore_atteso(altezza_immagine(crea_tacca_minuti()), RAGGIO * 3 //100)
     
         
