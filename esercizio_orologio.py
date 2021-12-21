@@ -245,7 +245,7 @@ controlla_valore_atteso(larghezza_immagine(crea_orologio(4, 10, 15)), DIAMETRO_S
 controlla_valore_atteso(altezza_immagine(crea_orologio(4, 10, 15)), DIAMETRO_SFONDO)
 
 
-def crea_animazione_orologio(ore: int, minuti: int, secondi: int):
+def crea_animazione_orologio(ore: int, minuti: int, secondi: int) -> Immagine:
     """
     Crea l'animazione di un orologio con la lancetta dei secondi che si muove 
     da 0 a secondi
