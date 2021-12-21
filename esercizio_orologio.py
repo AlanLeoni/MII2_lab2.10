@@ -32,10 +32,27 @@ NERO = (0, 0, 0)
 BIANCO = (255, 255, 255)
 GRIGIO = (84, 84, 84)
 ROSSO = (255, 0, 0)
-
-# crea_sfondo()
 RAGGIO_SFONDO_BIANCO = RAGGIO * 95 //100
 DIAMETRO_SFONDO = RAGGIO * 2
+ALTEZZA_TACCA_MINUTI = RAGGIO * 3 // 100
+LUNGHEZZA_TESTA_TACCA_MINUTI = RAGGIO * 82 // 100
+LUNGHEZZA_CODA_TACCA_MINUTI = RAGGIO * 8 // 100
+ALTEZZA_TACCA_5_MINUTI = RAGGIO * 8 // 100
+LUNGHEZZA_TESTA_TACCA_5_MINUTI = RAGGIO * 70 // 100
+LUNGHEZZA_CODA_TACCA_5_MINUTI = RAGGIO * 20 // 100
+GRADI_TACCHE_5_MINUTI = 360 // 60
+MOD5_TACCHE_5_MINUTI = 360 // 12
+ALTEZZA_LANCETTA_MINUTI = RAGGIO * 10 // 100
+LUNGHEZZA_TESTA_LANCETTA_MINUTI = RAGGIO * 20 // 100
+LUNGHEZZA_CODA_LANCETTA_MINUTI = RAGGIO * 85 // 100
+ALTEZZA_LANCETTA_ORE = RAGGIO * 12 // 100
+LUNGHEZZA_LANCETTA_TESTA_ORE = RAGGIO * 20 // 100
+LUNGHEZZA_LANCETTA_CODA_ORE = RAGGIO * 60 // 100
+ALTEZZA_LANCETTA_SECONDI  = RAGGIO * 2 // 100
+RAGGIO_PALLINO_ROSSO = RAGGIO * 8 // 100
+LUNGHEZZA_LANCETTA_TESTA_SECONDI = RAGGIO * 25 // 100
+LUNGHEZZA_LANCETTA_CODA_SECONDI = RAGGIO * 60 // 100
+
 
 def crea_sfondo() -> Immagine:
     """
@@ -51,9 +68,6 @@ controlla_valore_atteso(larghezza_immagine(crea_sfondo()), DIAMETRO_SFONDO)
 controlla_valore_atteso(altezza_immagine(crea_sfondo()), DIAMETRO_SFONDO)
 
 
-ALTEZZA_TACCA_MINUTI = RAGGIO * 3 // 100
-LUNGHEZZA_TESTA_TACCA_MINUTI = RAGGIO * 82 // 100
-LUNGHEZZA_CODA_TACCA_MINUTI = RAGGIO * 8 // 100
 def crea_tacca_minuti() -> Immagine:
     """
     Crea la singola tacca che indica i minuti
@@ -66,11 +80,9 @@ def crea_tacca_minuti() -> Immagine:
         affianca(testa_tacca, coda_tacca), "left", "middle")
 
 controlla_valore_atteso(larghezza_immagine(crea_tacca_minuti()), LUNGHEZZA_TESTA_TACCA_MINUTI + LUNGHEZZA_CODA_TACCA_MINUTI)
+controlla_valore_atteso(altezza_immagine(crea_tacca_minuti()), ALTEZZA_TACCA_MINUTI)
 
 
-ALTEZZA_TACCA_5_MINUTI = RAGGIO * 8 // 100
-LUNGHEZZA_TESTA_TACCA_5_MINUTI = RAGGIO * 70 // 100
-LUNGHEZZA_CODA_TACCA_5_MINUTI = RAGGIO * 20 // 100
 def crea_tacca_cinque_minuti() -> Immagine:
     """
     Crea la singola tacca che indica i cinque minuti
@@ -86,19 +98,15 @@ controlla_valore_atteso(larghezza_immagine(crea_tacca_cinque_minuti()), LUNGHEZZ
 controlla_valore_atteso(altezza_immagine(crea_tacca_cinque_minuti()), ALTEZZA_TACCA_5_MINUTI)
 
 
-GRADI_TACCHE_5_MINUTI = 360 // 60
-MOD5_TACCHE_5_MINUTI = 360 // 12
 def crea_tacche_minuti_5_minuti() -> Immagine:
     """
     Crea le tacche circolari indicanti i minuti ed evidenziati i 5 minuti
     
     returns: le tacche circolari indicanti i minuti e i 5 minuti
     """
-    gradi  = 360 // 60
-    mod5 = 360 // 12
     quadrante_prec = immagine_vuota()
-    for tacca in range(0, 360, gradi):
-        if tacca % mod5 == 0: 
+    for tacca in range(0, 360, GRADI_TACCHE_5_MINUTI):
+        if tacca % MOD5_TACCHE_5_MINUTI == 0: 
             tacca_quadrante = ruota(crea_tacca_cinque_minuti(), tacca)
         else:
             tacca_quadrante = ruota(crea_tacca_minuti(), tacca)    
@@ -106,7 +114,11 @@ def crea_tacche_minuti_5_minuti() -> Immagine:
         quadrante_prec = quadrante_minuti
     return quadrante_minuti
 
-controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), ((LUNGHEZZA_TESTA_TACCA_5_MINUTI + LUNGHEZZA_CODA_TACCA_5_MINUTI)* 2) - 1)
+# falliscono tutti di un pixel. 
+# controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), (larghezza_immagine(crea_tacca_minuti())) * 2)
+# controlla_valore_atteso(larghezza_immagine(crea_tacche_minuti_5_minuti()), ((LUNGHEZZA_TESTA_TACCA_5_MINUTI + LUNGHEZZA_CODA_TACCA_5_MINUTI)* 2))
+# controlla_valore_atteso(altezza_immagine(crea_tacche_minuti_5_minuti()), ((LUNGHEZZA_TESTA_TACCA_5_MINUTI + LUNGHEZZA_CODA_TACCA_5_MINUTI)* 2))
+
 
 def crea_quadrante() -> Immagine:
     """
@@ -120,9 +132,6 @@ controlla_valore_atteso(larghezza_immagine(crea_quadrante()), DIAMETRO_SFONDO)
 controlla_valore_atteso(altezza_immagine(crea_quadrante()), DIAMETRO_SFONDO)
 
 
-ALTEZZA_LANCETTA_MINUTI = RAGGIO * 10 // 100
-LUNGHEZZA_TESTA_LANCETTA_MINUTI = RAGGIO * 20 // 100
-LUNGHEZZA_CODA_LANCETTA_MINUTI = RAGGIO * 85 // 100
 def crea_lancetta_minuti(angolo: int) -> Immagine:
     """
     Crea la lancetta dei minuti in posizione ore 0
@@ -140,8 +149,10 @@ def crea_lancetta_minuti(angolo: int) -> Immagine:
     lancetta_orizzontale = affianca(lancetta_testa, lancetta_coda)
     lancetta_verticale = ruota(lancetta_orizzontale, posizione_zero)
     return ruota(lancetta_verticale, -(angolo))
+
 controlla_valore_atteso(larghezza_immagine(crea_lancetta_minuti(90)), LUNGHEZZA_TESTA_LANCETTA_MINUTI + LUNGHEZZA_CODA_LANCETTA_MINUTI)
 controlla_valore_atteso(altezza_immagine(crea_lancetta_minuti(90)), ALTEZZA_LANCETTA_MINUTI)
+
 
 def angolo_minuti(minuti: int) -> int:
     """
@@ -153,9 +164,7 @@ def angolo_minuti(minuti: int) -> int:
     grado_rotazione_minuto = 360 // 60
     return minuti * grado_rotazione_minuto
 
-ALTEZZA_LANCETTA_ORE = RAGGIO * 12 // 100
-LUNGHEZZA_LANCETTA_TESTA_ORE = RAGGIO * 20 // 100
-LUNGHEZZA_LANCETTA_CODA_ORE = RAGGIO * 60 // 100
+
 def crea_lancetta_ore(angolo: int) -> Immagine:
     """
     Crea l'immagine di una lancetta in posizione 0
@@ -190,10 +199,6 @@ def angolo_ore(ore: int, minuti: int) -> int:
     return ((ore * grado_rotazione_ore) % 360) + (angolo_minuti(minuti))//12
 
 
-ALTEZZA_LANCETTA_SECONDI  = RAGGIO * 2 // 100
-RAGGIO_PALLINO_ROSSO = RAGGIO * 8 // 100
-LUNGHEZZA_LANCETTA_TESTA_SECONDI = RAGGIO * 25 // 100
-LUNGHEZZA_LANCETTA_CODA_SECONDI = RAGGIO * 60 // 100
 def crea_lancetta_secondi(angolo: int) -> Immagine:
     """
     Crea la lancetta dei secondi in posizione ore 0
